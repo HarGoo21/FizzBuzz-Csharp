@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FizzBuzz
 {
@@ -6,44 +8,43 @@ namespace FizzBuzz
     {
         public static void Main(string[] args)
         {
-            string response = "";           // Holds the string value that will eventually be output
-            
             Console.WriteLine("Enter an upper bound for FizzBuzz:");
-            int limit = Convert.ToInt32(Console.ReadLine());       // Upper bound on numbers to process, obtained from user
+            var limit = Convert.ToInt32(Console.ReadLine());       // Upper bound on numbers to process, obtained from user
             
-            for (int i = 1; i <= limit; i++)
+            for (var i = 1; i <= limit; i++)
             {
-                response = "";              // Response initialised for each number processed
+                var response = "";
+                var words = new List<string>();           // Holds the string value that will eventually be output
                 
                 if (i % 13 == 0)            // Carry out rule for Fezz first as the position of this respective to the other words is most crucial
                 {
-                    response = "Fezz,";     // Words ended with commas so they can be separated ad have order reversed if necessary 
+                    words.Add("Fezz");     // Words ended with commas so they can be separated ad have order reversed if necessary 
                 }
                 
-                if (i % 11 == 0)            // Other words added if required in relevant positions
+                if (i % 11 == 0)            // Other words added if required in relevant positions change
                 {
-                    response += "Bong,";
+                    words.Add("Bong");
                 }
                 else
                 {
                     if (i % 3 == 0)
                     {
-                        response = "Fizz," + response;
+                        words.Insert(0, "Fizz");
                     }
 
                     if (i % 5 == 0)
                     {
-                        response += "Buzz,";
+                        words.Add("Buzz");
                     }
 
                     if (i % 7 == 0)
                     {
-                        response += "Bang,";
+                        words.Add("Bang");
                     }
                 }
                 
                 
-                if (response == "")            // If no words added then our response is the number i
+                if (!words.Any())            // If no words added then our response is the number i
                 {
                     response = i.ToString();
                 }
@@ -51,21 +52,11 @@ namespace FizzBuzz
                 {
                     if (i % 17 == 0)
                     {
-                        string[] words = response.Split(',');
-                        response = "";
-                        foreach (string word in words)
-                        {
-                            response = word + response;
-                        }
+                        response = words.Aggregate("", (current, word) => word + current);
                     }
                     else
                     {
-                        string[] words = response.Split(',');
-                        response = "";
-                        foreach (string word in words)
-                        {
-                            response += word;
-                        }
+                        response = words.Aggregate("", (current, word) => current + word);
                     }
                 }
                 
